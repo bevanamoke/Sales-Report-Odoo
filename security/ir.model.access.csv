@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_store_expense_location,Store Expense Location,model_store_expense_location,,1,1,1,1
+access_store_expense_category,Store Expense Category,model_store_expense_category,,1,1,1,1
+access_store_expense,Store Expense,model_store_expense,,1,1,1,1
+access_sales_store_expense_category_wizard,Sales Store Expense Category Wizard,model_sales_store_expense_category_wizard,,1,1,1,1
+access_store_expense_report_download,Store Expense Report Download,model_store_expense_report_download,,1,1,1,1
+access_sales_product_category_wizard,Sales Product Category Wizard,model_sales_product_category_wizard,,1,1,1,1
+access_sales_lines_report_wizard,Sales Lines Report Wizard,model_sales_lines_report_wizard,,1,1,1,1

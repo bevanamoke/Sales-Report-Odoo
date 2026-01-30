@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="store_expense_category_pdf">
+        <t t-call="web.html_container">
+            <t t-call="web.internal_layout">
+                <div class="page">
+                    <!-- Report Header -->
+                    <div class="row" style="margin-bottom: 20px;">
+                        <div class="col-6">
+                            <h2>Store Expense Category Report</h2>
+                            <p><strong>Company:</strong> <span t-esc="display_company_name"/></p>
+                            <p><strong>Period:</strong> <span t-esc="date_from"/> to <span t-esc="date_to"/></p>
+                        </div>
+                        <div class="col-6" style="text-align: right;">
+                            <p><strong>Generated:</strong> <span t-esc="datetime_now"/></p>
+                        </div>
+                    </div>
+
+                    <!-- Customers Section (if any selected) -->
+                    <div t-if="customer_names" class="row" style="margin-bottom: 15px;">
+                        <div class="col-12">
+                            <p><strong>Selected Customers:</strong> 
+                                <span t-esc="customer_names"/>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Report Table -->
+                    <table class="table" style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th style="border: 1px solid #dee2e6; padding: 8px; background-color: #f8f9fa; font-weight: bold;">Store Expense Category</th>
+                                <t t-foreach="location_names" t-as="location_name">
+                                    <th style="border: 1px solid #dee2e6; padding: 8px; background-color: #f8f9fa; font-weight: bold;" t-esc="location_name"/>
+                                </t>
+                                <th style="border: 1px solid #dee2e6; padding: 8px; background-color: #f8f9fa; font-weight: bold;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="category_names" t-as="category_name">
+                                <tr>
+                                    <td style="border: 1px solid #dee2e6; padding: 8px;" t-esc="category_name"/>
+                                    <t t-foreach="table_data.get(category_name, [])" t-as="amount">
+                                        <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">
+                                            <span t-esc="'{:,.2f}'.format(amount)"/>
+                                        </td>
+                                    </t>
+                                    <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right; font-weight: bold;">
+                                        <span t-esc="'{:,.2f}'.format(row_totals.get(category_name, 0.0))"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                        <tfoot>
+                            <tr style="font-weight: bold;">
+                                <td style="border: 1px solid #dee2e6; padding: 8px; background-color: #f8f9fa;">GRAND TOTAL</td>
+                                <t t-foreach="column_totals" t-as="column_total">
+                                    <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right; background-color: #f8f9fa;">
+                                        <span t-esc="'{:,.2f}'.format(column_total)"/>
+                                    </td>
+                                </t>
+                                <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right; background-color: #f8f9fa;">
+                                    <span t-esc="'{:,.2f}'.format(grand_total)"/>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

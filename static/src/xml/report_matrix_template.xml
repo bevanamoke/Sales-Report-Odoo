@@ -1,0 +1,59 @@
+<t t-name="sales_store_expense_report.detailed_report_template">
+    <div class="detailed-report-widget">
+        <div t-if="reportData.report_type === 'detailed_lines'">
+            <!-- Detailed Line Report -->
+            <div class="report-header">
+                <h2>Monthly Sales Lines Preview</h2>
+                <p>Report Period: <span t-esc="dateRange"/></p>
+            </div>
+            
+            <t t-foreach="locationGroups" t-as="group" t-key="group.uniqueKey">
+                <div class="location-group mb-4">
+                    <h3 class="location-title" t-esc="group.location"/>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Order Reference</th>
+                                    <th>Date</th>
+                                    <th>Customer Name</th>
+                                    <th>Product Category</th>
+                                    <th>Expense Category</th>
+                                    <th>Description</th>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="group.lines" t-as="line" t-key="line.uniqueKey">
+                                    <tr>
+                                        <td t-esc="line.order_reference"/>
+                                        <td t-esc="line.date"/>
+                                        <td t-esc="line.customer_name"/>
+                                        <td t-esc="line.product_category"/>
+                                        <td t-esc="line.expense_category"/>
+                                        <td t-esc="line.description"/>
+                                        <td t-esc="line.product"/>
+                                        <td t-esc="formatQuantity(line.quantity, line.uom)"/>
+                                        <td t-esc="formatAmount(line.price)"/>
+                                        <td t-esc="formatAmount(line.total)"/>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+            
+            <!-- Show message if no data -->
+            <t t-if="!hasData">
+                <div class="alert alert-info">
+                    No expense data found for the selected period and criteria.
+                </div>
+            </t>
+        </div>
+    </div>
+</t>

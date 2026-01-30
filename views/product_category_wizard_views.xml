@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sales_product_category_wizard_form" model="ir.ui.view">
+        <field name="name">sales.product.category.wizard.form</field>
+        <field name="model">sales.product.category.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Sales Product Category Report">
+                <sheet>
+                    <group>
+                        <group string="Company">
+                            <field name="company_id" widget="res_company" nolabel="1"/>
+                        </group>
+                        
+                        <group string="Filter Dates">
+                            <field name="date_from" string="From Date"/>
+                            <field name="date_to" string="To Date"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <group string="Customers (Optional)">
+                            <!-- domain is already applied in the Python model -->
+                            <field name="customer_ids" widget="many2many_tags" nolabel="1"/>
+                        </group>
+                        
+                        <group string="Product Categories (Required)">
+                            <field name="product_category_ids" 
+                                    widget="many2many_tags"
+                                    options="{'no_create': True}"
+                                    nolabel="1"/>
+                        </group>
+                    </group>
+
+                    <separator string="Report Preview"/>
+                    
+                    <!-- Instructions before preview is generated -->
+                    <div class="alert alert-info" invisible="has_preview">
+                        <strong>Configuration Complete.</strong> Click **Preview** below to generate the report data and view the summary.
+                    </div>
+                    
+                    <!-- Preview Section (Visible only after preview is generated) -->
+                    <group invisible="not has_preview">
+                        
+                        <!-- Summary Totals -->
+                        <group>
+                            <field name="grand_total" readonly="1" class="oe_read_only"/>
+                        </group>
+                        
+                        <!-- Matrix Data Display (uses custom widget) -->
+                        <group colspan="4">
+                             <!-- The report_data_json field holds the JSON string for the custom widget -->
+                             <field name="report_data_json" widget="product_category_report_widget" nolabel="1"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Hidden fields for logic -->
+                    <field name="preview_data" invisible="1"/>
+                    <field name="has_preview" invisible="1"/>
+                    
+                </sheet>
+                <footer>
+                    <button name="action_preview" string="Preview" type="object" class="btn-primary"/>
+                    
+                    <!-- Print buttons (visible only after preview) -->
+                    <button name="print_xls_report" string="Print Excel Report" type="object" class="btn-secondary" invisible="not has_preview"/>
+                    <button name="print_pdf_report" string="Print PDF Report" type="object" class="btn-secondary" invisible="not has_preview"/>
+                    
+                    <button string="Cancel" class="btn-link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sales_product_category_wizard" model="ir.actions.act_window">
+        <field name="name">Sales Product Category Report</field>
+        <field name="res_model">sales.product.category.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

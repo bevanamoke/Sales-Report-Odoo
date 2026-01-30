@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Store Expense Location Views -->
+    <record id="view_store_expense_location_list" model="ir.ui.view">
+        <field name="name">store.expense.location.list</field>
+        <field name="model">store.expense.location</field>
+        <field name="arch" type="xml">
+            <list string="Store Expense Locations">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_store_expense_location_form" model="ir.ui.view">
+        <field name="name">store.expense.location.form</field>
+        <field name="model">store.expense.location</field>
+        <field name="arch" type="xml">
+            <form string="Store Expense Location">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="company_id"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Store Expense Category Views -->
+    <record id="view_store_expense_category_list" model="ir.ui.view">
+        <field name="name">store.expense.category.list</field>
+        <field name="model">store.expense.category</field>
+        <field name="arch" type="xml">
+            <list string="Store Expense Categories">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_store_expense_category_form" model="ir.ui.view">
+        <field name="name">store.expense.category.form</field>
+        <field name="model">store.expense.category</field>
+        <field name="arch" type="xml">
+            <form string="Store Expense Category">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Store Expense Views -->
+    <record id="view_store_expense_list" model="ir.ui.view">
+        <field name="name">store.expense.list</field>
+        <field name="model">store.expense</field>
+        <field name="arch" type="xml">
+            <list string="Store Expenses">
+                <field name="date"/>
+                <field name="location_id"/>
+                <field name="category_id"/>
+                <field name="amount"/>
+                <field name="reference"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_store_expense_form" model="ir.ui.view">
+        <field name="name">store.expense.form</field>
+        <field name="model">store.expense</field>
+        <field name="arch" type="xml">
+            <form string="Store Expense">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="location_id"/>
+                            <field name="category_id"/>
+                        </group>
+                        <group>
+                            <field name="amount"/>
+                            <field name="reference"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description" placeholder="Enter expense description..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_store_expense_location" model="ir.actions.act_window">
+        <field name="name">Store Expense Locations</field>
+        <field name="res_model">store.expense.location</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_store_expense_location_list"/>
+    </record>
+
+    <record id="action_store_expense_category" model="ir.actions.act_window">
+        <field name="name">Store Expense Categories</field>
+        <field name="res_model">store.expense.category</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_store_expense_category_list"/>
+    </record>
+
+    <record id="action_store_expense" model="ir.actions.act_window">
+        <field name="name">Store Expenses</field>
+        <field name="res_model">store.expense</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_store_expense_list"/>
+    </record>
+</odoo>

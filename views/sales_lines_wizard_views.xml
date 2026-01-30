@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sales_lines_wizard_form" model="ir.ui.view">
+        <field name="name">sales.lines.report.wizard.form</field>
+        <field name="model">sales.lines.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Sales Lines Report">
+                <sheet>
+                    <group string="Filter Options" colspan="2" col="2">
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="customer_ids" widget="many2many_tags"/>
+                        <field name="product_category_id"/>
+                        <field name="store_expense_category_id"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                    
+                    <group 
+                        name="report_preview_container" 
+                        string="Preview" 
+                        colspan="2"
+                    >
+                        <attribute name="invisible">
+                            <![CDATA[[('report_data_json', '=', False)]]]>
+                        </attribute>
+                        
+                        <field name="report_data_json" widget="report_matrix_widget" nolabel="1"/>
+                    </group>
+                </sheet>
+                
+                <footer>
+                    <button name="action_preview" string="Preview" type="object" class="btn-primary"/>
+                    <button name="print_pdf_report" string="PDF Report" type="object" class="btn-secondary"/>
+                    <button name="print_xls_report" string="XLSX Report" type="object" class="btn-secondary"/>
+                    <button string="Cancel" class="btn-link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sales_lines_wizard" model="ir.actions.act_window">
+        <field name="name">Sales Lines Report</field>
+        <field name="res_model">sales.lines.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_sales_lines_report_wizard"/>
+    </record>
+</odoo>

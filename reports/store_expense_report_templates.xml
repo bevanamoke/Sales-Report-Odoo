@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_store_expense_category_pdf">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="header">
+                        <div class="row">
+                            <div class="col-6">
+                                <h2>Store Expense Category Report</h2>
+                            </div>
+                            <div class="col-6 text-right">
+                                <strong>Company:</strong> <span t-field="company.name"/><br/>
+                                <strong>Period:</strong> 
+                                <span t-field="date_from"/> to <span t-field="date_to"/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <table class="table table-bordered mt-4">
+                        <thead>
+                            <tr>
+                                <th>Store Expense Category</th>
+                                <t t-foreach="matrix_data.columns" t-as="location">
+                                    <th t-esc="location.name"/>
+                                </t>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="matrix_data.rows" t-as="category">
+                                <td t-esc="category.name"/>
+                                <td t-foreach="matrix_data.columns" t-as="location">
+                                    <span t-esc="'%.2f' % matrix_data.values.get(category.id, {}).get(location.id, 0.0)"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td t-foreach="matrix_data.columns" t-as="location">
+                                    <strong t-esc="'%.2f' % matrix_data.totals.get(location.id, 0.0)"/>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_store_expense_report_pdf" model="ir.actions.report">
+    <field name="name">Store Expense Category Report PDF</field>
+    <field name="model">sales.store.expense.category.wizard</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">sales_store_expense_report.store_expense_category_pdf</field>
+    <field name="print_report_name">'Store_Expense_Category_Report_%(date_from)s_%(date_to)s' % (object)</field>
+    <field name="binding_model_id" ref="model_sales_store_expense_category_wizard"/>
+    <field name="binding_type">report</field>
+</record>
+</odoo>

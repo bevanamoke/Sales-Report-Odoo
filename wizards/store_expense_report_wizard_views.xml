@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sales Store Expense Category Wizard View -->
+    <record id="view_sales_store_expense_category_wizard_form" model="ir.ui.view">
+        <field name="name">sales.store.expense.category.wizard.form</field>
+        <field name="model">sales.store.expense.category.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Store Expense Category Report">
+                <sheet>
+                    <group>
+                        <group string="COMPANY">
+                            <field name="company_id" widget="res_company" nolabel="1"/>
+                        </group>
+                        <group string="FILTER DATES">
+                            <field name="date_from" string="From Date"/>
+                            <field name="date_to" string="To Date"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <group string="CUSTOMERS (OPTIONAL)">
+                            <field name="customer_ids" widget="many2many_tags" nolabel="1"/>
+                        </group>
+                        <group string="STORE EXPENSE CATEGORIES">
+                            <field name="store_expense_category_ids" 
+                                   widget="many2many_tags"
+                                   options="{'no_create': True}"
+                                   nolabel="1"/>
+                        </group>
+                    </group>
+
+                    <div class="o_form_label" string="REPORT PREVIEW"/>
+                    
+                    <!-- Instructions before preview is generated -->
+                    <div class="alert alert-info" invisible="has_preview">
+                        <strong>Configuration Complete.</strong> Click <strong>Preview</strong> to generate the report.
+                    </div>
+                    
+                    <!-- Preview Section (Visible only after preview is generated) -->
+                    <div invisible="not has_preview">
+                        <!-- Summary Information -->
+                        <div class="alert alert-info">
+                            <strong>Preview</strong> - 
+                            Date Range: <field name="date_from"/> to <field name="date_to"/> | 
+                            Company: <field name="company_id" readonly="1"/> | 
+                            Customer: <field name="customer_info" readonly="1"/> | 
+                            Grand Total: <field name="grand_total" readonly="1"/>
+                        </div>
+                        
+                        <!-- Matrix Data Display -->
+                        <div class="mt-4">
+                            <field name="report_data_json" widget="product_category_report_widget" nolabel="1"/>
+                        </div>
+                    </div>
+                    
+                    <!-- Hidden fields for logic -->
+                    <field name="preview_data" invisible="1"/>
+                    <field name="has_preview" invisible="1"/>
+                </sheet>
+                
+                <footer>
+                    <button name="action_preview" string="Preview" type="object" class="btn-primary"/>
+                    <button name="print_xls_report" string="Print XLS Report" type="object" 
+                            class="btn-secondary" invisible="not has_preview"/>
+                    <button name="print_pdf_report" string="Print Full PDF Report" type="object" 
+                            class="btn-secondary" invisible="not has_preview"/>
+                    <button string="Cancel" class="btn-link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for Sales Store Expense Category Wizard -->
+    <record id="action_sales_store_expense_category_wizard" model="ir.actions.act_window">
+        <field name="name">Store Expense Category Report</field>
+        <field name="res_model">sales.store.expense.category.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Store Expense Location Views -->
+    <record id="view_store_expense_location_list" model="ir.ui.view">
+        <field name="name">store.expense.location.list</field>
+        <field name="model">store.expense.location</field>
+        <field name="arch" type="xml">
+            <list string="Store Expense Locations">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_store_expense_location_form" model="ir.ui.view">
+        <field name="name">store.expense.location.form</field>
+        <field name="model">store.expense.location</field>
+        <field name="arch" type="xml">
+            <form string="Store Expense Location">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="company_id"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Store Expense Category Views -->
+    <record id="view_store_expense_category_list" model="ir.ui.view">
+        <field name="name">store.expense.category.list</field>
+        <field name="model">store.expense.category</field>
+        <field name="arch" type="xml">
+            <list string="Store Expense Categories">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_store_expense_category_form" model="ir.ui.view">
+        <field name="name">store.expense.category.form</field>
+        <field name="model">store.expense.category</field>
+        <field name="arch" type="xml">
+            <form string="Store Expense Category">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Store Expense Views -->
+    <record id="view_store_expense_list" model="ir.ui.view">
+        <field name="name">store.expense.list</field>
+        <field name="model">store.expense</field>
+        <field name="arch" type="xml">
+            <list string="Store Expenses">
+                <field name="date"/>
+                <field name="location_id"/>
+                <field name="category_id"/>
+                <field name="amount"/>
+                <field name="reference"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_store_expense_form" model="ir.ui.view">
+        <field name="name">store.expense.form</field>
+        <field name="model">store.expense</field>
+        <field name="arch" type="xml">
+            <form string="Store Expense">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="location_id"/>
+                            <field name="category_id"/>
+                        </group>
+                        <group>
+                            <field name="amount"/>
+                            <field name="reference"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description" placeholder="Enter expense description..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_store_expense_location" model="ir.actions.act_window">
+        <field name="name">Store Expense Locations</field>
+        <field name="res_model">store.expense.location</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_store_expense_location_list"/>
+    </record>
+
+    <record id="action_store_expense_category" model="ir.actions.act_window">
+        <field name="name">Store Expense Categories</field>
+        <field name="res_model">store.expense.category</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_store_expense_category_list"/>
+    </record>
+
+    <record id="action_store_expense" model="ir.actions.act_window">
+        <field name="name">Store Expenses</field>
+        <field name="res_model">store.expense</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_store_expense_list"/>
+    </record>
+</odoo>

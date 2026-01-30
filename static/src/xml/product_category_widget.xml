@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="sales_store_expense_report.report_matrix_template" owl="1">
+        <!-- Main container for the report preview -->
+        <div class="o_report_matrix_preview p-4">
+
+            <!-- Report Header Info -->
+            <div class="mb-4 d-flex justify-content-between">
+                <div>
+                    <strong class="text-secondary">Report Period:</strong> 
+                    <!-- CRITICAL FIX: Access date_from/date_to from the reactive reportData object -->
+                    <t t-esc="reportData.date_from"/> to <t t-esc="reportData.date_to"/>
+                </div>
+                <div>
+                    <strong class="text-secondary">Grand Total:</strong>
+                    <span class="fw-bold fs-5 text-primary">
+                        <!-- CRITICAL FIX: Access grand_total from the reactive reportData object -->
+                        <t t-esc="formatAmount(reportData.grand_total)"/>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Conditional Table Display -->
+            <t t-if="reportData.rows.length === 0 and reportData.columns.length === 0">
+                <div class="alert alert-info text-center">
+                    No expense data found for the selected period and criteria.
+                </div>
+            </t>
+
+            <t t-else="">
+                <!-- Report Matrix Table -->
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered table-striped" style="min-width: 800px;">
+                        <!-- Table Header -->
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th class="text-start align-middle">Expense Category</th>
+                                <!-- Columns (Locations) -->
+                                <t t-foreach="reportData.columns" t-as="column" t-key="column.id">
+                                    <th class="text-end align-middle"><t t-esc="column.name"/></th>
+                                </t>
+                                <th class="text-end align-middle bg-secondary">Category Total</th>
+                            </tr>
+                        </thead>
+
+                        <!-- Table Body (Categories) -->
+                        <tbody>
+                            <t t-foreach="reportData.rows" t-as="row" t-key="row.id">
+                                <tr>
+                                    <td class="fw-bold"><t t-esc="row.name"/></td>
+                                    <!-- Values for each Location -->
+                                    <t t-foreach="reportData.columns" t-as="column" t-key="column.id">
+                                        <td class="text-end">
+                                            <t t-esc="formatAmount(getAmount(row.id, column.id))"/>
+                                        </td>
+                                    </t>
+                                    <!-- Row Total -->
+                                    <td class="text-end fw-bold bg-light">
+                                        <t t-esc="formatAmount(getRowTotal(row.id))"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+
+                        <!-- Table Footer (Column Totals & Grand Total) -->
+                        <tfoot class="bg-dark text-white">
+                            <tr>
+                                <th class="text-start">TOTAL BY LOCATION</th>
+                                <!-- Column Totals -->
+                                <t t-foreach="reportData.columns" t-as="column" t-key="column.id">
+                                    <th class="text-end">
+                                        <t t-esc="formatAmount(reportData.column_totals[column.id] || 0.0)"/>
+                                    </th>
+                                </t>
+                                <!-- Grand Total (Already fixed) -->
+                                <th class="text-end fw-bold bg-success">
+                                    <t t-esc="formatAmount(reportData.grand_total)"/>
+                                </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- The template name MUST match the one referenced in the JS file: ReportMatrixWidget.template -->
+    <t t-name="report_matrix_widget.ReportMatrixTable" owl="1">
+        <div class="o_report_matrix_container p-3">
+            <t t-if="props.value and state.data">
+                <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                    <h5>Store Expense Category Report</h5>
+                    <div class="text-right">
+                        <small class="text-muted">
+                            <t t-if="state.data.date_from and state.data.date_to">
+                                Period: <span t-esc="state.data.date_from"/> to <span t-esc="state.data.date_to"/>
+                            </t>
+                        </small>
+                    </div>
+                </div>
+
+                <table class="o_list_table table table-sm table-bordered table-hover">
+                    <!-- Header Row -->
+                    <thead>
+                        <tr class="bg-primary text-white">
+                            <th class="o_list_header_cell">Category / Location</th>
+                            <t t-foreach="state.data.columns" t-as="col" t-key="col_index">
+                                <th class="o_list_header_cell text-right" t-esc="col.name"/>
+                            </t>
+                            <th class="o_list_header_cell text-right">Row Total</th>
+                        </tr>
+                    </thead>
+                    
+                    <!-- Body Rows (Categories) -->
+                    <tbody>
+                        <t t-foreach="state.data.rows" t-as="row" t-key="row_index">
+                            <tr>
+                                <td class="font-weight-bold" t-esc="row.name"/>
+                                <t t-foreach="state.data.columns" t-as="col" t-key="col_index">
+                                    <!-- Display cell value using the JS helper function -->
+                                    <td class="text-right">
+                                        <span t-esc="parent.getCellAmount(row.id, col.id)" 
+                                              t-options="{'widget': 'monetary', 'display_currency': props.record.data.currency_id}"/>
+                                    </td>
+                                </t>
+                                <!-- Row Total -->
+                                <td class="text-right bg-light font-weight-bold">
+                                    <span t-esc="state.data.row_totals[row.id]" 
+                                          t-options="{'widget': 'monetary', 'display_currency': props.record.data.currency_id}"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                    
+                    <!-- Footer Row (Column Totals) -->
+                    <tfoot>
+                        <tr class="bg-info text-white">
+                            <td class="font-weight-bold">Column Total</td>
+                            <t t-foreach="state.data.columns" t-as="col" t-key="col_index">
+                                <!-- Display column total -->
+                                <td class="text-right font-weight-bold">
+                                    <span t-esc="state.data.column_totals[col.id]" 
+                                          t-options="{'widget': 'monetary', 'display_currency': props.record.data.currency_id}"/>
+                                </td>
+                            </t>
+                            <!-- Grand Total -->
+                            <td class="text-right font-weight-bold bg-danger">
+                                <span t-esc="state.data.grand_total" 
+                                      t-options="{'widget': 'monetary', 'display_currency': props.record.data.currency_id}"/>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </t>
+            <t t-else="">
+                <div class="alert alert-info">
+                    Press "Preview" to generate the report matrix here.
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

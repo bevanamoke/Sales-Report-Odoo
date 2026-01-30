@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Add store expense field to the sale order form view -->
+        <record id="view_sale_order_form_expense" model="ir.ui.view">
+            <field name="name">sale.order.form.expense</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <!-- Add store expense field to the order lines list view inside the form -->
+                <xpath expr="//field[@name='order_line']/list/field[@name='price_unit']" position="after">
+                    <field name="store_expense_id" string="Expense Category"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Keep your working tree view inheritance -->
+        <record id="view_order_line_tree_with_expense" model="ir.ui.view">
+            <field name="name">sale.order.line.tree.expense</field>
+            <field name="model">sale.order.line</field>
+            <field name="inherit_id" ref="sale.view_order_line_tree"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="store_expense_id" string="Expense Category"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

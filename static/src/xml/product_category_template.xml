@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sales_store_expense_report.ProductCategoryReportWidget" owl="1">
+        <div class="product-category-report-widget">
+            <!-- Report Table - ALWAYS SHOWN -->
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <!-- FIXED: Added t-key to columns loop -->
+                            <t t-foreach="reportData.columns" t-as="column" t-key="column.id">
+                                <th class="text-center">
+                                    <strong t-esc="column.name"/>
+                                </th>
+                            </t>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- FIXED: Added t-key to rows loop -->
+                        <t t-foreach="reportData.rows" t-as="row" t-key="row.id">
+                            <tr>
+                                <td>
+                                    <t t-if="row.name === 'Total'">
+                                        <strong t-esc="row.name"/>
+                                    </t>
+                                    <t t-else="">
+                                        <span t-esc="row.name"/>
+                                    </t>
+                                </td>
+                                <!-- FIXED: Added t-key to nested columns loop -->
+                                <t t-foreach="reportData.columns" t-as="column" t-key="column.id">
+                                    <td class="text-center">
+                                        <t t-if="row.name === 'Total'">
+                                            <strong t-esc="formatAmount(getAmount(row.id, column.id))"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span t-esc="formatAmount(getAmount(row.id, column.id))"/>
+                                        </t>
+                                    </td>
+                                </t>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Separator Line -->
+            <hr class="my-4"/>
+
+            <!-- Index Section -->
+            <div class="index-section">
+                <h6 class="mb-3">Index</h6>
+                <div class="d-flex flex-column gap-2">
+                    <button type="button" class="btn btn-link text-start p-0 text-decoration-none" t-on-click="() => onPrintReport('pdf')">
+                        <strong>Total PDT Report</strong>
+                    </button>
+                    <button type="button" class="btn btn-link text-start p-0 text-decoration-none" t-on-click="() => onPrintReport('xls')">
+                        <strong>Price 3% Report</strong>
+                    </button>
+                    <button type="button" class="btn btn-link text-start p-0 text-decoration-none" t-on-click="onCancel">
+                        <strong>Cancel</strong>
+                    </button>
+                </div>
+            </div>
+
+            <!-- No Data Message -->
+            <div t-if="!reportData.rows or reportData.rows.length === 0" class="alert alert-warning text-center">
+                <i class="fa fa-exclamation-triangle me-2"></i>
+                No categories selected. Please select product categories and click Preview.
+            </div>
+        </div>
+    </t>
+</templates>
